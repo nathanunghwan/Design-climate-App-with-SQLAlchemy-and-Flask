@@ -21,17 +21,12 @@ Base.prepare(engine, reflect=True)
 Measurement = Base.classes.measurement
 Station = Base.classes.station
 
-#################################################
-# Flask Setup
-#################################################
+
+# establish app
 app = Flask(__name__)
 
 
-#################################################
-# Flask Routes
-#################################################
-
-@app.route("/")
+# create home page route@app.route("/")
 def welcome():
     """List all available api routes."""
     return (
