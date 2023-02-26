@@ -97,7 +97,7 @@ def temp_monthly():
     prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
 
     # Query the primary station for all tobs from the last year
-    results_tobs = session.query(Measurement.date, Measurement.tobs).\
+    results_tobs = session.query(Measurement.station, Measurement.date, Measurement.tobs).\
         filter(Measurement.station == most_active_st).\
         filter(Measurement.date >= prev_year).all()
 
@@ -105,9 +105,9 @@ def temp_monthly():
     # Unravel results into a 1D array and convert to a list
     ##temps = list(np.ravel(results_tobs))
     temps=[]
-    for date, tobs in results_tobs:
+    for station, date, tobs in results_tobs:
         tobs_data={}
-        tobs_data[date]=tobs
+        tobs_data[station]={'date': date, 'tobs':tobs}
         temps.append(tobs_data)
     
     # Return the results
