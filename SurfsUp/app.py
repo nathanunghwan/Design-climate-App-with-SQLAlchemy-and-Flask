@@ -11,7 +11,8 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+engine = create_engine("sqlite:////Users/unghwanahn/git/Design-climate-App-with-SQLAlchemy-and-Flask/SurfsUp/Resources/hawaii.sqlite")
+
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -29,17 +30,24 @@ session = Session(engine)
 # Flask Setup
 #################################################
 ## WORK NEEDED HERE ##
-
+app = Flask(__name__)
 
 #################################################
 # Flask Routes
 #################################################
 
+## WORK NEEDED HERE ##
 @app.route("/")
 def welcome():
-## WORK NEEDED HERE ##
-
-
+    """List all available api routes."""
+    return (
+        f"/api/v1.0/precipitation<br/>"
+        f"/api/v1.0/stations<br>"
+        f"/api/v1.0/tobs<br>"
+        f"/api/v1.0/temp/<start><br>"
+        f"/api/v1.0/temp/<start>/<end>"
+        )
+      
 @app.route("/api/v1.0/precipitation")
 def precipitation():
     """Return the precipitation data for the last year"""
@@ -53,8 +61,11 @@ def precipitation():
     session.close()
     # Dict with date as the key and prcp as the value
     ## WORK NEEDED HERE ##
-    return ## WORK NEEDED HERE ##
-
+    date_prcp={}
+    for date, prcp in precipitation:
+        date_prcp[date]={"prcp":prcp}    
+     ## WORK NEEDED HERE ##
+    return jsonify(date_prcp)
 
 @app.route("/api/v1.0/stations")
 def stations():
@@ -126,6 +137,7 @@ def stats(start=None, end=None):
     temps = list(np.ravel(results))
     return ## WORK NEEDED HERE ##
 
-
+## WORK NEEDED HERE ##
 if __name__ == '__main__':
-    ## WORK NEEDED HERE ##
+    app.run(debug=True)
+    
