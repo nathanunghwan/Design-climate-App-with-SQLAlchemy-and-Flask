@@ -11,8 +11,8 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:////Users/unghwanahn/git/Design-climate-App-with-SQLAlchemy-and-Flask/SurfsUp/Resources/hawaii.sqlite")
-
+engine = create_engine("sqlite:////Users/bogop/Documents/Git_folder/Design-climate-App-with-SQLAlchemy-and-Flask/SurfsUp/Resources/hawaii.sqlite")
+#//Users/unghwanahn/git/Design-climate-App-with-SQLAlchemy-and-FlaskSurfsUp/Resources/
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -60,42 +60,58 @@ def precipitation():
 
     session.close()
     # Dict with date as the key and prcp as the value
-    ## WORK NEEDED HERE ##
     date_prcp={}
     for date, prcp in precipitation:
-        date_prcp[date]={"prcp":prcp}    
-     ## WORK NEEDED HERE ##
+        date_prcp[date]=prcp 
+    
     return jsonify(date_prcp)
 
 @app.route("/api/v1.0/stations")
 def stations():
     """Return a list of stations."""
-    results = session.query(Station.station).all()
+    results = session.query(Station.station, Station.name).all()
 
     session.close()
 
     # Unravel results into a 1D array and convert to a list
-    stations = list(np.ravel(results))
-    return ## WORK NEEDED HERE ##
+    ##stations = list(np.ravel(results))
+    stations=[]
+    for station, name in results:
+        station_data={}
+        station_data[station]=name
+        stations.append(station_data)
+    
+    return jsonify(stations)
 
 
 @app.route("/api/v1.0/tobs")
 def temp_monthly():
+    # Identify the most active station
+    most_active_st= session.query(Measurement.station, func.count(Measurement.station)).\
+                                  order_by(func.count(Measurement.station).desc()).\
+                                  group_by(Measurement.station).\
+                                  first()[0]
+
     """Return the temperature observations (tobs) for previous year."""
     # Calculate the date 1 year ago from last date in database
     prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
 
     # Query the primary station for all tobs from the last year
-    results = session.query(Measurement.tobs).\
-        filter(Measurement.station == 'USC00519281').\
+    results_tobs = session.query(Measurement.date, Measurement.tobs).\
+        filter(Measurement.station == most_active_st).\
         filter(Measurement.date >= prev_year).all()
 
     session.close()
     # Unravel results into a 1D array and convert to a list
-    temps = list(np.ravel(results))
-
+    ##temps = list(np.ravel(results_tobs))
+    temps=[]
+    for date, tobs in results_tobs:
+        tobs_data={}
+        tobs_data[date]=tobs
+        temps.append(tobs_data)
+    
     # Return the results
-    return jsonify(temps=temps)
+    return jsonify(temps)
 
 
 @app.route("/api/v1.0/temp/<start>")
@@ -122,7 +138,8 @@ def stats(start=None, end=None):
         session.close()
 
         temps = list(np.ravel(results))
-        return ## WORK NEEDED HERE ##
+        ## WORK NEEDED HERE ##
+        return jsonify(temps)
 
     # calculate TMIN, TAVG, TMAX with start and stop
     ## WORK NEEDED HERE ##
@@ -135,8 +152,8 @@ def stats(start=None, end=None):
 
     # Unravel results into a 1D array and convert to a list
     temps = list(np.ravel(results))
-    return ## WORK NEEDED HERE ##
-
+    ## WORK NEEDED HERE ##
+    return jsonify(temps)
 ## WORK NEEDED HERE ##
 if __name__ == '__main__':
     app.run(debug=True)
