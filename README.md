@@ -16,7 +16,7 @@
 - Sort the DataFrame values by "date".
 - Plot the results by using the DataFrame plot method
 <img
-  src=".\SurfsUp\Precipitation in Hawaii.png"
+  src=".\SurfsUp\Images\Precipitation in Hawaii.png"
   width="600"
   height="400"
 />"
@@ -33,7 +33,7 @@
 > + (2) Query the previous 12 months of TOBS data for that station.
 > + (3) Plot the results as a histogram with bins=12
 <img
-  src=".\SurfsUp\Temperatures Observation.png"
+  src=".\SurfsUp\Images\Temperatures Observation.png"
   width="600"
   height="400"
 />"
@@ -49,16 +49,41 @@ I designed a Flask API based on the queries. To do so, used Flask to create my r
  2. /api/v1.0/precipitation
  - Convert the query results from your precipitation analysis (i.e. retrieve only the last 12 months of data) to a dictionary using date as the key and prcp as the value.<br>
  - Return the JSON representation of your dictionary.
+<img
+  src="SurfsUp\Images\api_precipitation.png"
+  width="600"
+  height="400"
+/>
 
  3. /api/v1.0/stations
  - Return a JSON list of stations from the dataset.
+<img
+  src="SurfsUp\Images\api_stations.png"
+  width="600"
+  height="400"
+/>
 
  4. /api/v1.0/tobs
  - Query the dates and temperature observations of the most-active station for the previous year of data.<br>
  - Return a JSON list of temperature observations for the previous year.
+<img
+  src="SurfsUp\Images\api_tobs.png"
+  width="600"
+  height="400"
+/>
 
  5. /api/v1.0/<start> and /api/v1.0/<start>/<end>
  - Return a JSON list of the minimum temperature, the average temperature, and the maximum temperature for a specified start or start-end range.<br>
  - For a specified start, calculate TMIN, TAVG, and TMAX for all the dates greater than or equal to the start date.<br>
  - For a specified start date and end date, calculate TMIN, TAVG, and TMAX for the dates from the start date to the end date, inclusive.
+ <img
+  src="SurfsUp\Images\api_temp_start.png"
+  width="400"
+  height="200"
+/>
+<img
+  src="SurfsUp\Images\api_temp_start_end.png"
+  width="400"
+  height="200"
+/>
 
