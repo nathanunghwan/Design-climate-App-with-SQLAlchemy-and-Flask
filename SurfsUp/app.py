@@ -11,8 +11,8 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:////Users/bogop/Documents/Git_folder/Design-climate-App-with-SQLAlchemy-and-Flask/SurfsUp/Resources/hawaii.sqlite")
-#//Users/unghwanahn/git/Design-climate-App-with-SQLAlchemy-and-FlaskSurfsUp/Resources/
+engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+#windows--//Users/unghwanahn/git/Design-climate-App-with-SQLAlchemy-and-FlaskSurfsUp/Resources/hawaii.sqlite
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -44,8 +44,8 @@ def welcome():
         f"Precipitation: /api/v1.0/precipitation<br/>"
         f"List of Stations: /api/v1.0/stations<br>"
         f"Temperature for one year /api/v1.0/tobs<br>"
-        f"Temperature stat from the start date(yyyy-mm-dd): /api/v1.0/temp/<start><br>"
-        f"Temperature stat from start to end dates(yyyy-mm-dd): /api/v1.0/temp/<start>/<end>"
+        f"Temperature stat from the start date(yyyy.mm.dd): /api/v1.0/temp/<start><br>"
+        f"Temperature stat from start to end dates(yyyy.mm.dd): /api/v1.0/temp/<start>/<end>"
         )
 
 @app.route("/api/v1.0/precipitation")
@@ -75,6 +75,7 @@ def stations():
 
     # Unravel results into a 1D array and convert to a list
     ##stations = list(np.ravel(results))
+    # create a list of dictionaries with station info using for loop 
     stations=[]
     for station, name in results:
         station_data={}
@@ -104,6 +105,7 @@ def temp_monthly():
     session.close()
     # Unravel results into a 1D array and convert to a list
     ##temps = list(np.ravel(results_tobs))
+    # create a list of dictionaries with station info using for loop 
     temps=[]
     for station, date, tobs in results_tobs:
         tobs_data={}
@@ -116,7 +118,7 @@ def temp_monthly():
 
 @app.route("/api/v1.0/temp/<start>")
 @app.route("/api/v1.0/temp/<start>/<end>")
-def stats(start=None, end=None):
+def stats(start, end=None):
     """Return TMIN, TAVG, TMAX."""
 
     # Select statement
@@ -131,18 +133,27 @@ def stats(start=None, end=None):
         # temps = list(np.ravel(results))
         # return jsonify(temps)
 
-        start = dt.datetime.strptime(start, "%m%d%Y")
+        start = str(start)
+        end= session.query(func.max(Measurement.date)).\
+                scalar()
         results = session.query(*sel).\
             filter(Measurement.date >= start).all()
 
         session.close()
 
-        temps = list(np.ravel(results))
-        ## WORK NEEDED HERE ##
+        #temps = list(np.ravel(results))
+        temps=[]
+        for tmin, tavg, tmax in results:
+            static_data={}
+            static_data['TMIN'] = tmin
+            static_data['TAVG'] = tavg
+            static_data['TMAX'] = tmax
+            temps.append(static_data)
+
         return jsonify(temps)
 
     # calculate TMIN, TAVG, TMAX with start and stop
-    ## WORK NEEDED HERE ##
+    
 
     results = session.query(*sel).\
         filter(Measurement.date >= start).\
@@ -151,10 +162,17 @@ def stats(start=None, end=None):
     session.close()
 
     # Unravel results into a 1D array and convert to a list
-    temps = list(np.ravel(results))
-    ## WORK NEEDED HERE ##
-    return jsonify(temps)
-## WORK NEEDED HERE ##
+    #temps = list(np.ravel(results))
+    temps_st_end=[]
+    for tmin, tavg, tmax in results:
+        static_data={}
+        static_data['TMIN'] = tmin
+        static_data['TAVG'] = tavg
+        static_data['TMAX'] = tmax
+        temps_st_end.append(static_data)
+
+    return jsonify(temps_st_end)
+
 if __name__ == '__main__':
     app.run(debug=True)
     
