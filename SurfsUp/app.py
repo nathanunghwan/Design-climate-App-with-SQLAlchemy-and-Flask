@@ -43,9 +43,9 @@ def welcome():
     return (
         f"Precipitation: /api/v1.0/precipitation<br/>"
         f"List of Stations: /api/v1.0/stations<br>"
-        f"Temperature for one year /api/v1.0/tobs<br>"
-        f"Temperature stat from the start date(yyyy.mm.dd): /api/v1.0/temp/<start><br>"
-        f"Temperature stat from start to end dates(yyyy.mm.dd): /api/v1.0/temp/<start>/<end>"
+        f"Temperature (Time of observation): /api/v1.0/tobs<br>"
+        f"Temperature stat from the start date: /api/v1.0/temp/<start><br>"
+        f"Temperature stat from start to end dates: /api/v1.0/temp/<start>/<end>"
         )
 
 @app.route("/api/v1.0/precipitation")
@@ -142,6 +142,7 @@ def stats(start, end=None):
         session.close()
 
         #temps = list(np.ravel(results))
+        # create a list of dictionaries with station info using for loop . It lead us to understand easy
         temps=[]
         for tmin, tavg, tmax in results:
             static_data={}
@@ -163,6 +164,7 @@ def stats(start, end=None):
 
     # Unravel results into a 1D array and convert to a list
     #temps = list(np.ravel(results))
+    # create a list of dictionaries with station info using for loop . It lead us to understand easy
     temps_st_end=[]
     for tmin, tavg, tmax in results:
         static_data={}
