@@ -105,7 +105,7 @@ def temp_monthly():
     session.close()
     # Unravel results into a 1D array and convert to a list
     ##temps = list(np.ravel(results_tobs))
-    # create a list of dictionaries with station info using for loop 
+    # create a list of dictionaries with tob info using for loop 
     temps=[]
     for station, date, tobs in results_tobs:
         tobs_data={}
@@ -140,9 +140,9 @@ def stats(start, end=None):
             filter(Measurement.date >= start).all()
 
         session.close()
-
+        # # Unravel results into a 1D array and convert to a list
         #temps = list(np.ravel(results))
-        # create a list of dictionaries with station info using for loop . It lead us to understand easy
+        # create a list of dictionaries with statics info using for loop . It lead us to understand easy
         temps=[]
         for tmin, tavg, tmax in results:
             static_data={}
@@ -164,7 +164,7 @@ def stats(start, end=None):
 
     # Unravel results into a 1D array and convert to a list
     #temps = list(np.ravel(results))
-    # create a list of dictionaries with station info using for loop . It lead us to understand easy
+    # create a list of dictionaries with statics info using for loop . It lead us to understand easy
     temps_st_end=[]
     for tmin, tavg, tmax in results:
         static_data={}
