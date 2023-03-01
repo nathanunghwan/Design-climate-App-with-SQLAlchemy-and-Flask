@@ -11,7 +11,7 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+engine = create_engine("sqlite:///Design-climate-App-with-SQLAlchemy-and-Flask/SurfsUp/Resources/hawaii.sqlite")
 #sqlite:////Users/unghwanahn/git/Design-climate-App-with-SQLAlchemy-and-Flask/SurfsUp/Resources/hawaii.sqlite
 # windows--//Users/unghwanahn/git/Design-climate-App-with-SQLAlchemy-and-FlaskSurfsUp/Resources/hawaii.sqlite
 
